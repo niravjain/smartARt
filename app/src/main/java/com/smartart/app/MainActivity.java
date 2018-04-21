@@ -6,16 +6,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private Context mainContext;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     private final View.OnClickListener drawOnCanvasListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View view) {
             Toast.makeText(mainContext, "Draw", Toast.LENGTH_SHORT).show();
+
+            CanvasView myCanvasView;
+
+            // No XML file; just one custom view created programmatically.
+            myCanvasView = new CanvasView(mainContext);
+
+            // Request the full available screen for layout.
+            myCanvasView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
+            setContentView(myCanvasView);
         }
     };
 
