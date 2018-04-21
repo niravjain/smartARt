@@ -19,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -29,6 +30,10 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -36,17 +41,11 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:design:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-//    implementation files('lib/commons-codec-1.10.jar')
-//    implementation files('lib/commons-logging-1.2.jar')
-//    implementation files('lib/fluent-hc-4.5.5.jar')
-//    implementation files('lib/httpclient-4.5.5.jar')
-//    implementation files('lib/httpclient-cache-4.5.5.jar')
-//    implementation files('lib/httpclient-win-4.5.5.jar')
-//    implementation files('lib/httpcore-4.4.9.jar')
-//    implementation files('lib/httpmime-4.5.5.jar')
-//    implementation files('lib/jna-4.4.0.jar')
-//    implementation files('lib/jna-platform-4.4.0.jar')
+    api 'com.google.api-client:google-api-client-android:1.23.0' exclude module: 'httpclient'
+    api 'com.google.http-client:google-http-client-gson:1.23.0' exclude module: 'httpclient'
+    api 'com.google.apis:google-api-services-vision:v1-rev369-1.23.0'
 }
