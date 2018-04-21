@@ -144,18 +144,21 @@ public class CanvasView extends View {
         int[] pixels = new int[mExtraBitmap.getWidth() * mExtraBitmap.getHeight()];
         mExtraBitmap.getPixels(pixels, 0, mExtraBitmap.getWidth(), 0, 0,
                 mExtraCanvas.getWidth(), mExtraCanvas.getHeight());
-        Map<String, Integer> freq = new HashMap<>();
-        Log.d("myLog",pixels.length+"");
-        for(int p : pixels) {
-            String key = p+"";
-            int val = 1;
-            if (freq.containsKey(key)) {
-                val = freq.get(key);
-                val++;
-            }
-            freq.put(key, val);
-        }
-        Log.d("myLog", freq.keySet().toString());
+
+        AutodrawAPI autoDraw = new AutodrawAPI();
+        autoDraw.execute();
+//        Map<String, Integer> freq = new HashMap<>();
+//        Log.d("myLog",pixels.length+"");
+//        for(int p : pixels) {
+//            String key = p+"";
+//            int val = 1;
+//            if (freq.containsKey(key)) {
+//                val = freq.get(key);
+//                val++;
+//            }
+//            freq.put(key, val);
+//        }
+//        Log.d("myLog", freq.keySet().toString());
         mPath.reset();
 
     }
