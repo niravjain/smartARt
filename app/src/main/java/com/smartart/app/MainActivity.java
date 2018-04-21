@@ -1,8 +1,6 @@
 package com.smartart.app;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +17,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,11 +35,25 @@ public class MainActivity extends AppCompatActivity {
     private static final int MAX_LABEL_RESULTS = 10;
     private static final int MAX_DIMENSION = 1200;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private final View.OnClickListener drawOnCanvasListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View view) {
             Toast.makeText(mainContext, "Draw", Toast.LENGTH_SHORT).show();
+
+            CanvasView myCanvasView;
+
+            // No XML file; just one custom view created programmatically.
+            myCanvasView = new CanvasView(mainContext);
+
+            // Request the full available screen for layout.
+            myCanvasView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
+            setContentView(myCanvasView);
         }
     };
 
