@@ -1,6 +1,8 @@
 package com.smartart.app;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +51,16 @@ public class CanvasActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener clearListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(mainContext, "clear", Toast.LENGTH_SHORT).show();
+            CanvasView.clearPts();
+            CanvasView.clearView();
+        }
+    };
+
     private String generateJSON(float width, float height, List<Float> xPts, List<Float> yPts) {
 
         List<Integer> x = new ArrayList<>();
@@ -76,6 +88,7 @@ public class CanvasActivity extends AppCompatActivity {
         mainContext = this;
 
         findViewById(R.id.finish).setOnClickListener(finishListener);
+        findViewById(R.id.clear).setOnClickListener(clearListener);
     }
 
     private static class AutodrawAPI2 extends AsyncTask<String, Void, String> {
