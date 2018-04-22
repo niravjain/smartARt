@@ -39,17 +39,22 @@ public class CanvasActivity extends AppCompatActivity {
     private static String objectsDrawn;
     static Map<String,Boolean> topics = new LinkedHashMap<>();
     static TextView currentTopic;
-    static String current;
-    int topiccnt=0;
+    static TextView resultView;
 
-    private static void initializeTopics(){
+    static String current;
+    static int topiccnt;
+    static int score = 0;
+    static String final_result = "";
+
+    private void initializeTopics(){
 
         topics.put("apple",false);
         topics.put("chair",false);
         topics.put("car",false);
         topics.put("fish",false);
-
-
+        topiccnt = 0;
+        currentTopic = (TextView) findViewById(R.id.topic);
+        resultView = (TextView) findViewById(R.id.result);
     }
 
 
@@ -58,14 +63,12 @@ public class CanvasActivity extends AppCompatActivity {
 
         for (Map.Entry<String,Boolean> entry : topics.entrySet()){
 
-
-
             String key = entry.getKey();
             Boolean value= entry.getValue();
 
             if(!value){
                 topiccnt++;
-                currentTopic = (TextView) findViewById(R.id.topic);
+
                 currentTopic.setText("Topic Number "+topiccnt+" is "+key+":");
 
                 topics.put(key,true);
@@ -77,8 +80,6 @@ public class CanvasActivity extends AppCompatActivity {
 
         return "Game Over";
     }
-
-
 
 
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
@@ -102,6 +103,17 @@ public class CanvasActivity extends AppCompatActivity {
             AutodrawAPI2 autoDraw = new AutodrawAPI2();
             autoDraw.execute(jsonData);
             CanvasView.clearPts();
+        }
+    };
+
+    private final View.OnClickListener hintListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            Intent uploadImage = new Intent(mainContext, ObjRender.class);
+            uploadImage.putExtra("RESULT", final_result);
+            Log.d("Sending result", final_result);
+            mainContext.startActivity(uploadImage);
         }
     };
 
@@ -186,6 +198,7 @@ public class CanvasActivity extends AppCompatActivity {
         findViewById(R.id.finish).setOnClickListener(finishListener);
         findViewById(R.id.clear).setOnClickListener(clearListener);
         findViewById(R.id.explore).setOnClickListener(exploreListener);
+        findViewById(R.id.hint).setOnClickListener(hintListener);
     }
 
     private static class AutodrawAPI2 extends AsyncTask<String, Void, String> {
@@ -272,26 +285,29 @@ public class CanvasActivity extends AppCompatActivity {
                 String[] results = objectsDrawn.split(",");
 
                 boolean found = false;
-                String final_result = "";
-                String keySet = "apple chair fish car";
-                for(int idx = 0 ; idx < results.length ; idx++){
-                    if(keySet.contains(results[idx])){
-                        found = true;
-                        final_result = results[idx];
+
+
+                for(String ans:results){
+                    if(ans.equalsIgnoreCase(current)){
+                        found = true; //score
+                        final_result = ans;
                         break;
+                    }
+                    else{
+                        final_result="";
                     }
                 }
 
                 if(found){
-                    Intent uploadImage = new Intent(mainContext, ObjRender.class);
-                    uploadImage.putExtra("RESULT", final_result);
-                    Log.d("Sending result", final_result);
-                    Toast.makeText(mainContext, "Opening a 3D render of " + final_result,Toast.LENGTH_LONG).show();
 
-                    mainContext.startActivity(uploadImage);
+                    //Toast.makeText(mainContext, "Opening a 3D render of " + final_result,Toast.LENGTH_LONG).show();
+                    resultView.setText("Yay! That was correct.");
+                    
+
 
                 } else {
-
+                    resultView.setText("Oops! Wrong Answer. Please try once more.");
+                    CanvasView.clearView();
                 }
 
 
