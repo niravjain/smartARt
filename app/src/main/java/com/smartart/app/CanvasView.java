@@ -201,8 +201,12 @@ public class CanvasView extends View {
     }
 
     public static void clearView() {
-        mExtraBitmap.eraseColor(Color.TRANSPARENT);
-        mPath.reset();
+        if(mExtraBitmap != null) {
+            mExtraBitmap.eraseColor(Color.TRANSPARENT);
+        }
+        if (mPath != null) {
+            mPath.reset();
+        }
     }
 }
 

@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,24 +58,23 @@ public class CanvasActivity extends AppCompatActivity {
         resultView = (TextView) findViewById(R.id.result);
     }
 
-
-
     private String getNextTopic(){
 
         for (Map.Entry<String,Boolean> entry : topics.entrySet()){
 
             String key = entry.getKey();
             Boolean value= entry.getValue();
-
+            Log.d("topics","topiccnt: "+topiccnt);
+            Log.d("topics","key: "+key);
+            Log.d("topics","value: "+value);
             if(!value){
-                topiccnt++;
 
-                currentTopic.setText("Topic Number "+topiccnt+" is "+key+":");
+                currentTopic.setText("Topic Number "+(topiccnt+1)+" is "+key+":");
 
                 topics.put(key,true);
+
                 return key;
             }
-
 
         }
 
@@ -110,10 +110,12 @@ public class CanvasActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Intent uploadImage = new Intent(mainContext, ObjRender.class);
-            uploadImage.putExtra("RESULT", final_result);
-            Log.d("Sending result", final_result);
-            mainContext.startActivity(uploadImage);
+            if(!final_result.isEmpty()) {
+                Intent uploadImage = new Intent(mainContext, ObjRender.class);
+                uploadImage.putExtra("RESULT", final_result);
+                Log.d("Sending result", final_result);
+                mainContext.startActivity(uploadImage);
+            }
         }
     };
 
@@ -187,11 +189,39 @@ public class CanvasActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        Log.d("final_result",final_result);
+
+        if(final_result.equalsIgnoreCase("game over")) {
+            // game over
+            Toast.makeText(mainContext, "Game over bro! Congrats." ,Toast.LENGTH_LONG).show();
+        }
+        else {
+            if(topiccnt != 0) {
+                // continue game
+                current = getNextTopic();
+            }
+            else {
+                // start game. Weird case
+                Log.d("WARNING: ","WEIRD CASE!");
+            }
+            CanvasView.clearView();
+            resultView.setText("");
+        }
+        topiccnt++;
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
         initializeTopics();
+        Log.d("values", ""+topics.get("apple"));
         current = getNextTopic();
+
 
         mainContext = this;
 
