@@ -120,7 +120,9 @@ public class ImageUploadActivity extends AppCompatActivity {
         // Changed here after gamification decided
 
         // get drawn object from canvas activity
-        String drawnObject = "apple";
+//        String drawnObject = "apple";
+        String drawnObject = CanvasActivity.current;
+        Log.d("Current object from Canvas", drawnObject);
 
         StringBuilder message = new StringBuilder();
 
