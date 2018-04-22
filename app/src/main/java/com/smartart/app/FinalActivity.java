@@ -25,4 +25,5 @@ public class FinalActivity extends AppCompatActivity {
         TextView fscore = findViewById(R.id.score);
         fscore.setText(""+currScore);
     }
+
 }

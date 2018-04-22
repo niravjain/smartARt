@@ -48,8 +48,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        SharedPreferences sp = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        int highScore = sp.getInt("highScore", 0);
+
+        TextView highScoreText = findViewById(R.id.highscore);
+        highScoreText.setText("High Score: "+highScore);
     }
 
     private final View.OnClickListener drawOnCanvasListener = new View.OnClickListener() {
