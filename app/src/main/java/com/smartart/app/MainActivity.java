@@ -41,15 +41,30 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Toast.makeText(mainContext, "Draw", Toast.LENGTH_SHORT).show();
+            Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
+            mainContext.startActivity(drawCanvas);
 
-            CanvasView myCanvasView;
 
-            // No XML file; just one custom view created programmatically.
-            myCanvasView = new CanvasView(mainContext);
+//            CanvasView myCanvasView;
+//
+//            // No XML file; just one custom view created programmatically.
+//            myCanvasView = new CanvasView(mainContext);
+//
+//            // Request the full available screen for layout.
+//            myCanvasView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
+//            setContentView(myCanvasView);
 
-            // Request the full available screen for layout.
-            myCanvasView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
-            setContentView(myCanvasView);
+
+
+
+//            DrawWebView myCanvasView;
+//
+//            // No XML file; just one custom view created programmatically.
+//            myCanvasView = new DrawWebView(mainContext);
+//
+//            // Request the full available screen for layout.
+//            myCanvasView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
+//            setContentView(myCanvasView);
         }
     };
 
