@@ -78,7 +78,7 @@ public class RendererActivity extends Activity implements ISceneController
 	    // _glSurfaceView.setEGLConfigChooser(8,8,8,8, 16, 0);
 	    // _glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
-		// Example of enabling logging of GL operations 
+		// Example of enabling logging of GL operations
 		// _glSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);
     }
 	

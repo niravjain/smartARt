@@ -1,6 +1,7 @@
 package com.smartart.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
 
 public class CanvasActivity extends AppCompatActivity {
 
-    private Context mainContext;
+    private static Context mainContext;
     private static String objectsDrawn;
 
     private final View.OnClickListener finishListener = new View.OnClickListener() {
@@ -156,13 +157,35 @@ public class CanvasActivity extends AppCompatActivity {
                 JSONArray lvl2 = (JSONArray)lvl1.get(0);
                 JSONArray lvl3 = (JSONArray)lvl2.get(1);
 
-                objectsDrawn = lvl3.toString();
-                Log.d("json from inner", objectsDrawn);
+                objectsDrawn = lvl3.toString().replace("[","").replace("]","").toLowerCase();
+                String[] results = objectsDrawn.split(",");
+
+                boolean found = false;
+                String keySet = "apple banana chair fish";
+                for(int idx = 0 ; idx < results.length ; idx++){
+                    if(keySet.contains(results[idx])){
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(found){
+                    String final_result = objectsDrawn.split(",")[0].replace("\"","").replace("[","");
+                    Intent uploadImage = new Intent(mainContext, ObjRender.class);
+                    uploadImage.putExtra("RESULT", final_result);
+                    Log.d("Result", final_result);
+                    Toast.makeText(mainContext, "Opening a 3D render of your result",Toast.LENGTH_LONG).show();
+
+                    mainContext.startActivity(uploadImage);
+
+                } else {
+
+                }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 

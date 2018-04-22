@@ -3,6 +3,7 @@ package com.smartart.app;
 import android.common.ResourceUtils;
 import android.common.UIUtils;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -23,7 +24,6 @@ import min3d.vos.Light;
  *
  */
 public class ObjRender extends RendererActivity {
-    private Object3dContainer objModel;
 
     @Override
     public void initScene() {
@@ -33,17 +33,35 @@ public class ObjRender extends RendererActivity {
         IParser parser = null;
 
         try{
-            String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/camaro_obj";
-            Log.d("CHIRAG", resID);
-            parser = Parser.createParser(Parser.Type.OBJ,
-                    getResources(), resID, true);
+
+            Intent callingIntent = getIntent();
+            String result = callingIntent.getStringExtra("RESULT");
+
+            if(result.equals("apple")){
+                String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/" + result;
+                parser = Parser.createParser(Parser.Type.OBJ, getResources(), resID, true);
+            } else if(result.equals("banana")) {
+                String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/" + result;
+                parser = Parser.createParser(Parser.Type.OBJ, getResources(), resID, true);
+            } else if(result.equals("chair")) {
+                String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/" + result;
+                parser = Parser.createParser(Parser.Type.OBJ, getResources(), resID, true);
+            } else if(result.equals("fish")) {
+                String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/" + result;
+                parser = Parser.createParser(Parser.Type.OBJ, getResources(), resID, true);
+            } else if(result.equals("car")) {
+                String resID = ResourceUtils.getGlobalResourcePackageIdentifier(this.getBaseContext())+":raw/camaro_obj";
+                parser = Parser.createParser(Parser.Type.OBJ, getResources(), resID, true);
+            }
+
+
         }catch(Exception ex){
             UIUtils.showSimpleErrorDialog(this, "Fatal Error", ex);
         }
 
         parser.parse();
 
-        objModel = parser.getParsedObject();
+        Object3dContainer objModel = parser.getParsedObject();
         objModel.scale().x = objModel.scale().y = objModel.scale().z = .7f;
         scene.addChild(objModel);
 
@@ -51,7 +69,7 @@ public class ObjRender extends RendererActivity {
 
     @Override
     public void updateScene() {
-        objModel.rotation().x++;
-        objModel.rotation().z++;
+//        objModel.rotation().x++;
+//        objModel.rotation().z++;
     }
 }
