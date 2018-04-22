@@ -75,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener min3dOnCanvasListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(mainContext, ObjRender.class);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -119,5 +128,6 @@ public class MainActivity extends AppCompatActivity {
         // while interacting with the UI.
         findViewById(R.id.drawButton).setOnClickListener(drawOnCanvasListener);
         findViewById(R.id.photoButton).setOnClickListener(photoOnCanvasListener);
+        findViewById(R.id.button3).setOnClickListener(min3dOnCanvasListener);
     }
 }
