@@ -40,6 +40,7 @@ public class CanvasActivity extends AppCompatActivity {
     static Map<String,Boolean> topics = new LinkedHashMap<>();
     static TextView currentTopic;
     static TextView resultView;
+    static int difficulty = 5;
 
     static String current;
     static int topiccnt;
@@ -286,15 +287,21 @@ public class CanvasActivity extends AppCompatActivity {
 
                 boolean found = false;
 
-
+                int ctr = 0;
                 for(String ans:results){
-                    if(ans.equalsIgnoreCase(current)){
+                    ctr++;
+
+                    if(ctr>=difficulty){
+                        break;
+                    }
+                    else if(ans.equalsIgnoreCase(current)){
                         found = true; //score
                         final_result = ans;
                         break;
                     }
                     else{
                         final_result="";
+
                     }
                 }
 
