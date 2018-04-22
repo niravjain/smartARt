@@ -42,9 +42,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
-        android:background="@android:color/background_light"
+        android:background="@android:color/background_dark"
         android:fontFamily="@font/bangers"
         android:text="Lets Draw Something !"
+        android:textColor="@android:color/background_light"
         android:textSize="24sp" />
 
 </RelativeLayout>
