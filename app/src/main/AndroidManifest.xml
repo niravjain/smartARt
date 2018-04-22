@@ -41,11 +41,11 @@
         <activity
             android:name=".ImageUploadActivity"
             android:label="@string/title_activity_image_upload"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ObjRender"
             android:label="@string/title_activity_image_upload"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CanvasActivity" />
         <meta-data
             android:name="preloaded_fonts"
