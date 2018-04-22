@@ -9,8 +9,3 @@ For extra points, we have a fun feature similar to a treasure hunt wherein the c
 In the end, the total score is calculated through the stages in the game and it shows the child's performance. Additionally, this game has 
 a difficulty feature where the user can decide how strict the classifier should be. The classifier is built in such a way that it will 
 understand the child's version of an object, i.e., it overlooks lack of detail and crooked edges.
-
-
-
-
-
