@@ -21,12 +21,25 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CanvasActivity extends AppCompatActivity {
 
     private static Context mainContext;
     private static String objectsDrawn;
+    Map<String,Boolean> topics = new HashMap<>();
+
+    private static void initializeTopics{
+
+        topics.put("apple",false);
+        topics.put("chair",false);
+        topics.put("car",false);
+        topics.put("fish",false);
+
+    }
+
 
     private final View.OnClickListener finishListener = new View.OnClickListener() {
 
@@ -38,6 +51,7 @@ public class CanvasActivity extends AppCompatActivity {
             float width = CanvasView.getScreenWidth();
 
             String jsonData = generateJSON(width, height, xPts, yPts);
+
 
             AutodrawAPI2 autoDraw = new AutodrawAPI2();
             autoDraw.execute(jsonData);
