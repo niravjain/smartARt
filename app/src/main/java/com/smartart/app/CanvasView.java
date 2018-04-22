@@ -29,8 +29,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom view that follows touch events to draw on a canvas.
@@ -54,9 +54,9 @@ public class CanvasView extends View {
         super(context);
 
         mBackgroundColor = ResourcesCompat.getColor(getResources(),
-                R.color.opaque_orange, null);
+                R.color.white, null);
         mDrawColor = ResourcesCompat.getColor(getResources(),
-                R.color.opaque_yellow, null);
+                R.color.black_overlay, null);
 
         // Holds the path we are currently drawing.
         mPath = new Path();
@@ -64,7 +64,7 @@ public class CanvasView extends View {
         mPaint = new Paint();
         mPaint.setColor(mDrawColor);
         // Smoothes out edges of what is drawn without affecting shape.
-        mPaint.setAntiAlias(true);
+        mPaint.setAntiAlias(false);
         // Dithering affects how colors with higher-precision
         // than the device are down-sampled.
         mPaint.setDither(true);
@@ -117,6 +117,9 @@ public class CanvasView extends View {
     // This keeps the switch statement
     // concise and and easier to change what happens for each event.
 
+    static List<Float> xPts = new ArrayList<>();
+    static List<Float> yPts = new ArrayList<>();
+
     private void touchStart(float x, float y) {
         mPath.moveTo(x, y);
         mX = x;
@@ -134,31 +137,14 @@ public class CanvasView extends View {
             mY = y;
             // Draw the path in the extra bitmap to save it.
             mExtraCanvas.drawPath(mPath, mPaint);
+
+            xPts.add(x);
+            yPts.add(y);
         }
     }
 
     private void touchUp() {
         // Reset the path so it doesn't get drawn again.
-        Rect bounds = mExtraCanvas.getClipBounds();
-
-        int[] pixels = new int[mExtraBitmap.getWidth() * mExtraBitmap.getHeight()];
-        mExtraBitmap.getPixels(pixels, 0, mExtraBitmap.getWidth(), 0, 0,
-                mExtraCanvas.getWidth(), mExtraCanvas.getHeight());
-
-        AutodrawAPI autoDraw = new AutodrawAPI();
-        autoDraw.execute();
-//        Map<String, Integer> freq = new HashMap<>();
-//        Log.d("myLog",pixels.length+"");
-//        for(int p : pixels) {
-//            String key = p+"";
-//            int val = 1;
-//            if (freq.containsKey(key)) {
-//                val = freq.get(key);
-//                val++;
-//            }
-//            freq.put(key, val);
-//        }
-//        Log.d("myLog", freq.keySet().toString());
         mPath.reset();
 
     }
@@ -188,6 +174,15 @@ public class CanvasView extends View {
         }
         return true;
     }
+
+    public static List<Float> getXPts() {
+        return xPts;
+    }
+
+    public static List<Float> getYPts() {
+        return yPts;
+    }
+
     // Get the width of the screen
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
