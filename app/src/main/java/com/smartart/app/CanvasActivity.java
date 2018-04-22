@@ -43,7 +43,7 @@ public class CanvasActivity extends AppCompatActivity {
 
     private static Context mainContext;
     private static String objectsDrawn;
-    static Map<String,Boolean> topics = new LinkedHashMap<>();
+    static String[] stages = {"chair", "apple", "car", "fish"};
     static TextView currentTopic;
     static TextView resultView;
     static int difficulty = 5;
@@ -53,42 +53,16 @@ public class CanvasActivity extends AppCompatActivity {
     static int score = 0;
     static String final_result = "";
 
+    static String currentState = "";
+    static String previousState = "";
+
+    public static Button explore;
+    public static Button finishButton;
+    public static Button hint;
+    public static Button next;
+    public int stageNumber;
+
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private void initializeTopics(){
-
-        topics.put("apple",false);
-        topics.put("chair",false);
-        topics.put("car",false);
-        topics.put("fish",false);
-        topiccnt = 0;
-        currentTopic = (TextView) findViewById(R.id.topic);
-        resultView = (TextView) findViewById(R.id.result);
-    }
-
-    private String getNextTopic(){
-
-        for (Map.Entry<String,Boolean> entry : topics.entrySet()){
-
-            String key = entry.getKey();
-            Boolean value= entry.getValue();
-            Log.d("topics","topiccnt: "+topiccnt);
-            Log.d("topics","key: "+key);
-            Log.d("topics","value: "+value);
-            if(!value){
-
-                currentTopic.setText("Topic Number "+(topiccnt+1)+" is "+key+":");
-
-                topics.put(key,true);
-
-                return key;
-            }
-
-        }
-
-        return "Game Over";
-    }
-
 
     public static final int CAMERA_PERMISSIONS_REQUEST = 2;
     public static final int CAMERA_IMAGE_REQUEST = 3;
@@ -196,50 +170,76 @@ public class CanvasActivity extends AppCompatActivity {
         return json;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-
-        Log.d("final_result",final_result);
-
-        if(final_result.equalsIgnoreCase("game over")) {
-            // game over
-            Toast.makeText(mainContext, "Game over bro! Congrats." ,Toast.LENGTH_LONG).show();
-        }
-        else {
-            if(topiccnt != 0) {
-                // continue game
-                current = getNextTopic();
-            }
-            else {
-                // start game. Weird case
-                Log.d("WARNING: ","WEIRD CASE!");
-            }
-            CanvasView.clearView();
-            resultView.setText("");
-        }
-        topiccnt++;
-
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();  // Always call the superclass method first
+//
+//        Log.d("final_result",final_result);
+//
+//        if(final_result.equalsIgnoreCase("game over")) {
+//            // game over
+//            Toast.makeText(mainContext, "Game over bro! Congrats." ,Toast.LENGTH_LONG).show();
+//        }
+//        else {
+//            if(topiccnt != 0) {
+//                // continue game
+//                current = getNextTopic();
+//            }
+//            else {
+//                // start game. Weird case
+//                Log.d("WARNING: ","WEIRD CASE!");
+//            }
+//            CanvasView.clearView();
+//            resultView.setText("");
+//        }
+//        topiccnt++;
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
-        initializeTopics();
-        Log.d("values", ""+topics.get("apple"));
-        current = getNextTopic();
+
+
 
         mainContext = this;
 
-        Button finishButton = findViewById(R.id.finish);
+        finishButton = findViewById(R.id.finish);
         finishButton.setOnClickListener(finishListener);
         findViewById(R.id.clear).setOnClickListener(clearListener);
-        findViewById(R.id.explore).setOnClickListener(exploreListener);
+        explore = findViewById(R.id.explore);
+        explore.setOnClickListener(exploreListener);
 
+        Intent i = getIntent();
+        stageNumber = i.getIntExtra("STAGE", 0);
+        current = stages[stageNumber];
 
-        Log.d(TAG, "Started Main Activity");
-        findViewById(R.id.hint).setOnClickListener(hintListener);
+        Log.d(TAG, "Started Canvas Activity for stage: " + current);
+        hint = findViewById(R.id.hint);
+        hint.setOnClickListener(hintListener);
+
+        next = findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
+                Log.d(TAG, "Starting Canvas Activity");
+                drawCanvas.putExtra("STAGE", stageNumber + 1);
+                finish();
+                mainContext.startActivity(drawCanvas);
+            }
+        });
+
+        next.setEnabled(false);
+        hint.setEnabled(false);
+        explore.setEnabled(false);
+
+        currentTopic = (TextView) findViewById(R.id.topic);
+        currentTopic.setText(current);
+        resultView = (TextView) findViewById(R.id.result);
+        resultView.setText("Go ahead and please draw a " + current);
 
     }
 
@@ -342,7 +342,9 @@ public class CanvasActivity extends AppCompatActivity {
                     }
                     else if(ans.equalsIgnoreCase(current)){
                         found = true; //score
-
+                        hint.setEnabled(true);
+                        explore.setEnabled(true);
+                        next.setEnabled(true);
                         SharedPreferences sp = activity.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE);
                         int score = sp.getInt("score", 0);
                         score += 100;
@@ -358,7 +360,8 @@ public class CanvasActivity extends AppCompatActivity {
                     }
                     else{
                         final_result="";
-
+                        hint.setEnabled(false);
+                        explore.setEnabled(false);
                     }
                 }
 

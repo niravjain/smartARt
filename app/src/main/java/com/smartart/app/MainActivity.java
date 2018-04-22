@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
             Log.d(TAG, "Starting Canvas Activity");
+            drawCanvas.putExtra("STAGE", 0);
             mainContext.startActivity(drawCanvas);
         }
     };
