@@ -379,7 +379,13 @@ public class CanvasActivity extends AppCompatActivity {
 
 
                 } else {
-                    resultView.setText("Oops! Wrong Answer. Please try once more.");
+                    if (results.length == 0) {
+                        resultView.setText("Please draw something!");
+                    }
+                    else {
+                        resultView.setText("Oops! Wrong Answer. Did you draw "+results[0]+"? Please try once more.");
+                    }
+
                     CanvasView.clearView();
                 }
 
