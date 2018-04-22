@@ -114,11 +114,12 @@ public class ImageUploadActivity extends AppCompatActivity {
             labelDetectionTask.execute();
         } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of other IOException " +
-                    e.getMessage());
+                e.getMessage());
         }
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
+        // Changed here after gamification decided
         StringBuilder message = new StringBuilder("I found these things:\n\n");
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();

@@ -77,18 +77,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
-            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
-            Intent uploadImage = new Intent(this, ImageUploadActivity.class);
-            uploadImage.putExtra("PHOTO_URI", photoUri.toString());
-            mainContext.startActivity(uploadImage);
-        }
-    }
-
     public void startCamera() {
         if (PermissionUtils.requestPermission(
                 this,
@@ -100,6 +88,18 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+            Intent uploadImage = new Intent(this, ImageUploadActivity.class);
+            uploadImage.putExtra("PHOTO_URI", photoUri.toString());
+            mainContext.startActivity(uploadImage);
         }
     }
 
