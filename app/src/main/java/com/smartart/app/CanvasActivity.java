@@ -23,8 +23,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
-
 public class CanvasActivity extends AppCompatActivity {
 
     private static Context mainContext;
@@ -47,6 +45,16 @@ public class CanvasActivity extends AppCompatActivity {
             autoDraw.execute(jsonData);
             CanvasView.clearPts();
 
+        }
+    };
+
+    private final View.OnClickListener clearListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(mainContext, "clear", Toast.LENGTH_SHORT).show();
+            CanvasView.clearPts();
+            CanvasView.clearView();
         }
     };
 
@@ -77,6 +85,7 @@ public class CanvasActivity extends AppCompatActivity {
         mainContext = this;
 
         findViewById(R.id.finish).setOnClickListener(finishListener);
+        findViewById(R.id.clear).setOnClickListener(clearListener);
     }
 
     private static class AutodrawAPI2 extends AsyncTask<String, Void, String> {

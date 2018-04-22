@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(mainContext, "Draw", Toast.LENGTH_SHORT).show();
             Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
             mainContext.startActivity(drawCanvas);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2122e446592cd7972f39f00a247ec19ef4aeb059
         }
     };
 

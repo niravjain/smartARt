@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -39,11 +40,11 @@ import java.util.List;
 public class CanvasView extends View {
 
     private Paint mPaint;
-    private Path mPath;
+    private static Path mPath;
     private int mDrawColor;
     private int mBackgroundColor;
     private Canvas mExtraCanvas;
-    private Bitmap mExtraBitmap;
+    private static Bitmap mExtraBitmap;
     private Rect mFrame;
 
     CanvasView (Context context) {
@@ -91,8 +92,8 @@ public class CanvasView extends View {
         mExtraCanvas.drawColor(mBackgroundColor);
 
         // Calculate the rect a frame around the picture.
-        int inset = 40;
-        mFrame = new Rect (inset, inset, width - inset, height - inset);
+        int inset = 1;
+        mFrame = new Rect (inset, inset, width - inset, height - 3*inset);
     }
 
     @Override
@@ -193,9 +194,15 @@ public class CanvasView extends View {
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
+
     // Get the height of the screen
     public static int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    public static void clearView() {
+        mExtraBitmap.eraseColor(Color.TRANSPARENT);
+        mPath.reset();
     }
 }
 

@@ -2,14 +2,7 @@ package com.smartart.app;
 
 import android.common.ResourceUtils;
 import android.common.UIUtils;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.util.Log;
-
-import java.io.File;
 
 import min3d.core.Object3dContainer;
 import min3d.core.RendererActivity;
