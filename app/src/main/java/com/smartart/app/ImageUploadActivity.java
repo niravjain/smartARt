@@ -7,12 +7,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,18 +116,34 @@ public class ImageUploadActivity extends AppCompatActivity {
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
         // Changed here after gamification decided
-        StringBuilder message = new StringBuilder("I found these things:\n\n");
 
+        // get drawn object from canvas activity
+        String drawnObject = "apple";
+
+        StringBuilder message = new StringBuilder();
+
+        int identified = 0;
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
-                message.append("\n");
+                String possibleObject = String.format(Locale.US, "%s", label.getDescription());
+                Log.d("label", possibleObject);
+                if (possibleObject.equals(drawnObject)) {
+                    message.append("CONGRATS! You have correctly identified the object");
+                    identified = 1;
+                    // add points
+                    break;
+                }
+//                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
+//                message.append("\n");
             }
-        } else {
-            message.append("nothing");
+            if (identified == 0) {
+                message.append("You found the wrong item!");
+            }
+        }else {
+            message.append("Oops! Did not find anything");
+//            message.append("nothing");
         }
-
         return message.toString();
     }
 
