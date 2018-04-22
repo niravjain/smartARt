@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -22,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,16 +31,47 @@ public class CanvasActivity extends AppCompatActivity {
 
     private static Context mainContext;
     private static String objectsDrawn;
-    Map<String,Boolean> topics = new HashMap<>();
+    static Map<String,Boolean> topics = new LinkedHashMap<>();
+    static TextView currentTopic;
+    static String current;
+    int topiccnt=0;
 
-    private static void initializeTopics{
+    private static void initializeTopics(){
 
         topics.put("apple",false);
         topics.put("chair",false);
         topics.put("car",false);
         topics.put("fish",false);
 
+
     }
+
+
+    private String getNextTopic(){
+
+        for (Map.Entry<String,Boolean> entry : topics.entrySet()){
+
+
+
+            String key = entry.getKey();
+            Boolean value= entry.getValue();
+
+            if(!value){
+                topiccnt++;
+                currentTopic = (TextView) findViewById(R.id.topic);
+                currentTopic.setText("Topic Number "+topiccnt+" is "+key+":");
+
+                topics.put(key,true);
+                return key;
+            }
+
+
+        }
+
+        return "Game Over";
+    }
+
+
 
 
     private final View.OnClickListener finishListener = new View.OnClickListener() {
@@ -93,6 +126,8 @@ public class CanvasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
+        initializeTopics();
+        current = getNextTopic();
 
         mainContext = this;
 
