@@ -4,6 +4,8 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
-    <string name="loading_message">Uploading image. Please wait.</string>
+    <string name="loading_message">Uploading image. Please wait.... </string>
     <string name="title_activity_image_upload">ImageUploadActivity</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
 </resources>

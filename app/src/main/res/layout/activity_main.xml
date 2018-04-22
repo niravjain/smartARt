@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainActivityLayout"
     android:layout_width="match_parent"
@@ -14,31 +15,50 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
 
-    <Button
-        android:id="@+id/photoButton"
-        android:layout_width="172dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:backgroundTint="?attr/colorButtonNormal"
+        android:padding="8dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="277dp"
+        android:layout_height="77dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="51dp"
-        android:text="Take a photo" />
+        android:layout_marginTop="122dp"
+        android:elevation="@dimen/fab_margin"
+        app:srcCompat="@drawable/logo" />
 
     <Button
         android:id="@+id/drawButton"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="81dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="111dp"
-        android:text="Draw" />
+        android:layout_marginBottom="54dp"
+        android:background="@android:color/background_dark"
+        android:fontFamily="@font/bangers"
+        android:text="Lets Draw Something !"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="159dp"
+    <TextView
+        android:id="@+id/highscore"
+        android:layout_width="116dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="193dp"
-        android:text="Button" />
+        android:layout_centerInParent="true"
+        android:background="@android:color/background_dark"
+        android:fontFamily="@font/bangers"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp" />
 
 </RelativeLayout>

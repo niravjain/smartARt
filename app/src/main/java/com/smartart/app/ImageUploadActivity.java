@@ -2,17 +2,14 @@ package com.smartart.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,17 +45,20 @@ public class ImageUploadActivity extends AppCompatActivity {
     private static final String CLOUD_VISION_API_KEY = "AIzaSyA4m3BlJJEs_E_XXJVWx7s9FgFOTmuLQiY";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
-    public Context currentContext;
+    public static Context currentContext;
     private static final String TAG = MainActivity.class.getSimpleName();
+    static String currentStage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_upload);
+        currentContext = this;
         uploadImage = findViewById(R.id.uploadImageView);
         uploadResult = findViewById(R.id.resultTextView);
         Intent callingIntent = getIntent();
         Uri photoUri = Uri.parse(callingIntent.getStringExtra("PHOTO_URI"));
+        currentStage = callingIntent.getStringExtra("CURRENT_STAGE");
         uploadImage(photoUri);
     }
 
@@ -114,23 +114,54 @@ public class ImageUploadActivity extends AppCompatActivity {
             labelDetectionTask.execute();
         } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of other IOException " +
-                    e.getMessage());
+                e.getMessage());
         }
     }
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder("I found these things:\n\n");
+        // Changed here after gamification decided
+        // get drawn object from canvas activity
+//        String drawnObject = "apple";
 
+        String drawnObject = currentStage;
+        Log.d("Current object from Canvas", drawnObject);
+
+        StringBuilder message = new StringBuilder();
+
+        int identified = 0;
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
-                message.append("\n");
-            }
-        } else {
-            message.append("nothing");
-        }
+                String possibleObject = String.format(Locale.US, "%s", label.getDescription());
+                Log.d("label", possibleObject);
+                if (possibleObject.equals(drawnObject)) {
+                    message.append("CONGRATS! You have correctly identified the object");
 
+                    SharedPreferences sp = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE);
+                    int score = sp.getInt("score", 0);
+                    //Toast.makeText(currentContext, "50 points added", Toast.LENGTH_LONG).show();
+                    score += 50;
+
+                    SharedPreferences.Editor editor = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE).edit();
+                    editor.putInt("score", score);
+                    editor.apply();
+
+                    Log.d("Score in canvas", ""+score);
+
+                    identified = 1;
+                    // add points
+                    break;
+                }
+//                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
+//                message.append("\n");
+            }
+            if (identified == 0) {
+                message.append("You found the wrong item!");
+            }
+        }else {
+            message.append("Oops! Did not find anything");
+//            message.append("nothing");
+        }
         return message.toString();
     }
 
