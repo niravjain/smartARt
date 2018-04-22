@@ -72,6 +72,7 @@ public class CanvasView extends View {
         mPaint.setStrokeJoin(Paint.Join.ROUND); // default: MITER
         mPaint.setStrokeCap(Paint.Cap.ROUND); // default: BUTT
         mPaint.setStrokeWidth(12); // default: Hairline-width (really thin)
+
     }
 
     /**
@@ -181,6 +182,11 @@ public class CanvasView extends View {
 
     public static List<Float> getYPts() {
         return yPts;
+    }
+
+    public static void clearPts() {
+        xPts = new ArrayList<>();
+        yPts = new ArrayList<>();
     }
 
     // Get the width of the screen
