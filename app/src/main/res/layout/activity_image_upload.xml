@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/uploadImageView"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="351dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -20,10 +20,10 @@
         android:layout_width="304dp"
         android:layout_height="94dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="87dp"
-        android:layout_marginEnd="29dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
         android:fontFamily="@font/bangers"
         android:text="TextView"
+        android:textAlignment="center"
         android:textSize="36dp" />
 </RelativeLayout>

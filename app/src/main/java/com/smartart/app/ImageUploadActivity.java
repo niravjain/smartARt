@@ -2,6 +2,7 @@ package com.smartart.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -44,13 +45,14 @@ public class ImageUploadActivity extends AppCompatActivity {
     private static final String CLOUD_VISION_API_KEY = "AIzaSyA4m3BlJJEs_E_XXJVWx7s9FgFOTmuLQiY";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
-    public Context currentContext;
+    public static Context currentContext;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_upload);
+        currentContext = this;
         uploadImage = findViewById(R.id.uploadImageView);
         uploadResult = findViewById(R.id.resultTextView);
         Intent callingIntent = getIntent();
@@ -130,6 +132,17 @@ public class ImageUploadActivity extends AppCompatActivity {
                 Log.d("label", possibleObject);
                 if (possibleObject.equals(drawnObject)) {
                     message.append("CONGRATS! You have correctly identified the object");
+
+                    SharedPreferences sp = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE);
+                    int score = sp.getInt("score", 0);
+                    score += 50;
+
+                    SharedPreferences.Editor editor = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE).edit();
+                    editor.putInt("score", score);
+                    editor.apply();
+
+                    Log.d("Score in canvas", ""+score);
+
                     identified = 1;
                     // add points
                     break;

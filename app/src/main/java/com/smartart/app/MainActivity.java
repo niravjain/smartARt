@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,30 +18,19 @@ public class MainActivity extends AppCompatActivity {
 
     static String MY_PREFS_NAME = "MyPrefsFile";
 
-//    Context context = getActivity();
-//    SharedPreferences sharedPref = context.getSharedPreferences(
-//            getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-
-    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-
-    SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt("Score", 0);
-//        editor.commit();
+        SharedPreferences sp = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
 
-        editor.putString("name", "Elena");
-        editor.putInt("idName", 12);
-        editor.apply();
+        int score = sp.getInt("score", 0);
 
         setContentView(R.layout.activity_main);
         mainContext = this;
+
+        TextView highScore = findViewById(R.id.highscore);
+        highScore.setText("High Score: "+score);
 
         Button drawButton = findViewById(R.id.drawButton);
         drawButton.setOnClickListener(drawOnCanvasListener);
@@ -64,15 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            String restoredText = prefs.getString("text", null);
-            if (restoredText != null) {
-                String name = prefs.getString("name", "No name defined");//"No name defined" is the default value.
-                int idName = prefs.getInt("idName", 0); //0 is the default value.
-                Log.d("name",name);
-                Log.d("idName",idName);
-            }
-
-            Toast.makeText(mainContext, "Draw", Toast.LENGTH_SHORT).show();
             Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
             Log.d(TAG, "Starting Canvas Activity");
             mainContext.startActivity(drawCanvas);

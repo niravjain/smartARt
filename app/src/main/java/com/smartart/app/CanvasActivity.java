@@ -3,6 +3,7 @@ package com.smartart.app;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.services.vision.v1.Vision;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -26,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,7 +54,7 @@ public class CanvasActivity extends AppCompatActivity {
     static String final_result = "";
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    
+
     private void initializeTopics(){
 
         topics.put("apple",false);
@@ -104,7 +108,7 @@ public class CanvasActivity extends AppCompatActivity {
             String jsonData = generateJSON(width, height, xPts, yPts);
 
 
-            AutodrawAPI2 autoDraw = new AutodrawAPI2();
+            AutodrawAPI2 autoDraw = new AutodrawAPI2(CanvasActivity.this);
             autoDraw.execute(jsonData);
             CanvasView.clearPts();
         }
@@ -226,7 +230,6 @@ public class CanvasActivity extends AppCompatActivity {
         Log.d("values", ""+topics.get("apple"));
         current = getNextTopic();
 
-
         mainContext = this;
 
         Button finishButton = findViewById(R.id.finish);
@@ -246,8 +249,12 @@ public class CanvasActivity extends AppCompatActivity {
     }
 
     private static class AutodrawAPI2 extends AsyncTask<String, Void, String> {
-
+        private final WeakReference<CanvasActivity> mActivityWeakReference;
         private Exception exception;
+
+        AutodrawAPI2(CanvasActivity activity) {
+            mActivityWeakReference = new WeakReference<>(activity);
+        }
 
         protected String doInBackground(String... urls) {
             String response;
@@ -313,6 +320,7 @@ public class CanvasActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String response_result) {
+            CanvasActivity activity = mActivityWeakReference.get();
 
             try {
 
@@ -339,6 +347,17 @@ public class CanvasActivity extends AppCompatActivity {
                     }
                     else if(ans.equalsIgnoreCase(current)){
                         found = true; //score
+
+                        SharedPreferences sp = activity.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE);
+                        int score = sp.getInt("score", 0);
+                        score += 100;
+
+                        SharedPreferences.Editor editor = activity.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE).edit();
+                        editor.putInt("score", score);
+                        editor.apply();
+
+                        Log.d("Score in canvas", ""+score);
+
                         final_result = ans;
                         break;
                     }
