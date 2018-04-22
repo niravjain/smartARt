@@ -47,6 +47,7 @@ public class ImageUploadActivity extends AppCompatActivity {
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     public static Context currentContext;
     private static final String TAG = MainActivity.class.getSimpleName();
+    static String currentStage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class ImageUploadActivity extends AppCompatActivity {
         uploadResult = findViewById(R.id.resultTextView);
         Intent callingIntent = getIntent();
         Uri photoUri = Uri.parse(callingIntent.getStringExtra("PHOTO_URI"));
+        currentStage = callingIntent.getStringExtra("CURRENT_STAGE");
         uploadImage(photoUri);
     }
 
@@ -118,10 +120,10 @@ public class ImageUploadActivity extends AppCompatActivity {
 
     private static String convertResponseToString(BatchAnnotateImagesResponse response) {
         // Changed here after gamification decided
-
         // get drawn object from canvas activity
 //        String drawnObject = "apple";
-        String drawnObject = CanvasActivity.current;
+
+        String drawnObject = currentStage;
         Log.d("Current object from Canvas", drawnObject);
 
         StringBuilder message = new StringBuilder();
@@ -137,6 +139,7 @@ public class ImageUploadActivity extends AppCompatActivity {
 
                     SharedPreferences sp = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE);
                     int score = sp.getInt("score", 0);
+                    //Toast.makeText(currentContext, "50 points added", Toast.LENGTH_LONG).show();
                     score += 50;
 
                     SharedPreferences.Editor editor = currentContext.getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE).edit();

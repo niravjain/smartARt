@@ -47,6 +47,11 @@
             android:label="@string/title_activity_image_upload"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CanvasActivity" />
+        <activity
+            android:name=".FinalActivity"
+            android:label="@string/title_activity_image_upload"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

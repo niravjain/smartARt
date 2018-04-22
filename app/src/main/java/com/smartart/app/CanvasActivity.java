@@ -115,7 +115,7 @@ public class CanvasActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(mainContext, "Photo", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mainContext, "Photo", Toast.LENGTH_SHORT).show();
             startCamera();
         }
     };
@@ -142,6 +142,7 @@ public class CanvasActivity extends AppCompatActivity {
             Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
             Intent uploadImage = new Intent(this, ImageUploadActivity.class);
             uploadImage.putExtra("PHOTO_URI", photoUri.toString());
+            uploadImage.putExtra("CURRENT_STAGE", current);
             mainContext.startActivity(uploadImage);
         }
     }
@@ -201,8 +202,6 @@ public class CanvasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
 
-
-
         mainContext = this;
 
         finishButton = findViewById(R.id.finish);
@@ -213,34 +212,41 @@ public class CanvasActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         stageNumber = i.getIntExtra("STAGE", 0);
-        current = stages[stageNumber];
 
-        Log.d(TAG, "Started Canvas Activity for stage: " + current);
-        hint = findViewById(R.id.hint);
-        hint.setOnClickListener(hintListener);
+        if (stageNumber == 4){
+            Intent in = new Intent(this, FinalActivity.class);
+            finish();
+            startActivity(in);
+        }
+        else {
+            current = stages[stageNumber];
 
-        next = findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener(){
+            Log.d(TAG, "Started Canvas Activity for stage: " + current);
+            hint = findViewById(R.id.hint);
+            hint.setOnClickListener(hintListener);
 
-            @Override
-            public void onClick(View view) {
-                Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
-                Log.d(TAG, "Starting Canvas Activity");
-                drawCanvas.putExtra("STAGE", stageNumber + 1);
-                finish();
-                mainContext.startActivity(drawCanvas);
-            }
-        });
+            next = findViewById(R.id.next);
+            next.setOnClickListener(new View.OnClickListener() {
 
-        next.setEnabled(false);
-        hint.setEnabled(false);
-        explore.setEnabled(false);
+                @Override
+                public void onClick(View view) {
+                    Intent drawCanvas = new Intent(mainContext, CanvasActivity.class);
+                    Log.d(TAG, "Starting Canvas Activity");
+                    drawCanvas.putExtra("STAGE", stageNumber + 1);
+                    finish();
+                    mainContext.startActivity(drawCanvas);
+                }
+            });
 
-        currentTopic = (TextView) findViewById(R.id.topic);
-        currentTopic.setText(current);
-        resultView = (TextView) findViewById(R.id.result);
-        resultView.setText("Go ahead and please draw a " + current);
+            next.setEnabled(false);
+            hint.setEnabled(false);
+            explore.setEnabled(false);
 
+            currentTopic = (TextView) findViewById(R.id.topic);
+            currentTopic.setText(current);
+            resultView = (TextView) findViewById(R.id.result);
+            resultView.setText("Go ahead and please draw a " + current);
+        }
     }
 
     private static class AutodrawAPI2 extends AsyncTask<String, Void, String> {

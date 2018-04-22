@@ -22,15 +22,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sp = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = getSharedPreferences(MainActivity.MY_PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putInt("score", 0);
+        editor.apply();
 
-        int score = sp.getInt("score", 0);
+        SharedPreferences sp = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        int highScore = sp.getInt("highScore", 0);
 
         setContentView(R.layout.activity_main);
         mainContext = this;
 
-        TextView highScore = findViewById(R.id.highscore);
-        highScore.setText("High Score: "+score);
+        TextView highScoreText = findViewById(R.id.highscore);
+        highScoreText.setText("High Score: "+highScore);
 
         Button drawButton = findViewById(R.id.drawButton);
         drawButton.setOnClickListener(drawOnCanvasListener);
