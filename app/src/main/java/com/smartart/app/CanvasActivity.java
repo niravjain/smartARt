@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -32,12 +33,22 @@ public class CanvasActivity extends AppCompatActivity {
 
             AutodrawAPI autoDraw = new AutodrawAPI();
             autoDraw.execute(jsonData);
+
         }
     };
 
+    //private String generateJSON(float width, float height, List<Float> xPts, List<Float> yPts) {
     private String generateJSON(float width, float height, List<Float> xPts, List<Float> yPts) {
-        //String json = "{ 'input_type': 0, 'requests': [   {     'language': 'autodraw',     'writing_guide': {       'width': "+width+",       'height': "+height+"     },     'ink': [       [         "+xPts+",         "+yPts+"       ]     ]   } ]}";
-        String json = "{ \"input_type\": 0, \"requests\": [   {     \"language\": \"autodraw\",     \"writing_guide\": {       \"width\": "+width+",       \"height\": "+height+"     },     \"ink\": [       [         "+xPts+",         "+yPts+"       ]     ]   } ]}";
+        List<Integer> x = new ArrayList<>();
+        for(float f : xPts) {
+            x.add((int)f);
+        }
+        List<Integer> y = new ArrayList<>();
+        for(float f : yPts) {
+            y.add((int)f);
+        }
+        //String json = "{ \"input_type\": 0, \"requests\": [   {     \"language\": \"autodraw\",     \"writing_guide\": {       \"width\": "+width+",       \"height\": "+height+"     },     \"ink\": [       [         "+xPts+",         "+yPts+"       ]     ]   } ]}";
+        String json = "{ \"input_type\": 0, \"requests\": [   {     \"language\": \"autodraw\",     \"writing_guide\": {       \"width\": "+width+",       \"height\": "+height+"     },     \"ink\": [       [         "+x+",         "+y+"       ]     ]   } ]}";
         Log.d("json",json);
         return json;
     }
