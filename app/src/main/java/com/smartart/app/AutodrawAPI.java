@@ -3,6 +3,9 @@ package com.smartart.app;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -56,7 +59,7 @@ public class AutodrawAPI extends AsyncTask<String, Void, String> {
             try {
                 InputStream ip = new BufferedInputStream(conn.getInputStream());
                 result = convertInputStreamToString(ip);
-                Log.d("myLog", "RESULT: " + result);
+                Log.d("result", result);
             } finally {
                 conn.disconnect();
             }
@@ -81,8 +84,16 @@ public class AutodrawAPI extends AsyncTask<String, Void, String> {
 
     }
 
-    protected void onPostExecute(String feed) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
+    protected void onPostExecute(String response_result) {
+
+
+//        try {
+//            JSONObject jsonAsObj = new JSONObject(response_result);
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+
     }
 }
