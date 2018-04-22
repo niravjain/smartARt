@@ -32,8 +32,6 @@ public class CanvasActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(mainContext, "finish", Toast.LENGTH_SHORT).show();
-
             List<Float> xPts = CanvasView.getXPts();
             List<Float> yPts = CanvasView.getYPts();
             float height = CanvasView.getScreenHeight();
@@ -166,24 +164,29 @@ public class CanvasActivity extends AppCompatActivity {
                 JSONArray lvl2 = (JSONArray)lvl1.get(0);
                 JSONArray lvl3 = (JSONArray)lvl2.get(1);
 
-                objectsDrawn = lvl3.toString().replace("[","").replace("]","").toLowerCase();
+                objectsDrawn = lvl3.toString().replace("[","")
+                        .replace("]","")
+                        .replace("\"","")
+                        .toLowerCase();
+                Log.d("In post exec", objectsDrawn);
                 String[] results = objectsDrawn.split(",");
 
                 boolean found = false;
-                String keySet = "apple banana chair fish";
+                String final_result = "";
+                String keySet = "apple chair fish car";
                 for(int idx = 0 ; idx < results.length ; idx++){
                     if(keySet.contains(results[idx])){
                         found = true;
+                        final_result = results[idx];
                         break;
                     }
                 }
 
                 if(found){
-                    String final_result = objectsDrawn.split(",")[0].replace("\"","").replace("[","");
                     Intent uploadImage = new Intent(mainContext, ObjRender.class);
                     uploadImage.putExtra("RESULT", final_result);
-                    Log.d("Result", final_result);
-                    Toast.makeText(mainContext, "Opening a 3D render of your result",Toast.LENGTH_LONG).show();
+                    Log.d("Sending result", final_result);
+                    Toast.makeText(mainContext, "Opening a 3D render of " + final_result,Toast.LENGTH_LONG).show();
 
                     mainContext.startActivity(uploadImage);
 
